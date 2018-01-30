@@ -1,0 +1,31 @@
+name: SlimefunBow
+main: qwq.Main
+version: 1.8
+author: DomRR
+depend: [CS-CoreLib, Slimefun]
+commands:
+ RE:
+  description: 购买宝石.
+  usage: /<command> <宝石> <玩家>
+  permission: slimefunbow.re
+  permission-message: 你没有 <permission> 权限.
+ REReload:
+  description: 重新加载插件.
+  usage: /<command>
+  permission: slimefunbow.reload
+  permission-message: 你没有 <permission> 权限.
+ REDebug:
+  description: 切换Debug.
+  usage: /<command>
+  permission: slimefunbow.debug
+  permission-message: 你没有 <permission> 权限.
+ rbq:
+  description: rbq.
+  usage: /<command> <玩家> [金钱]
+  permission: slimefunbow.rbq
+  permission-message: 你没有 <permission> 权限.
+ RestoreHelmet:
+  description: 恢复头盔.
+  usage: /<command>
+  permission: slimefunbow.restorehelmet
+  permission-message: 你没有 <permission> 权限.
