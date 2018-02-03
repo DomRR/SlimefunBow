@@ -1,7 +1,6 @@
 package qwq;
 
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
 import net.milkbowl.vault.economy.Economy;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.Item.CustomItem;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
@@ -16,7 +15,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,14 +56,9 @@ public final class Main extends JavaPlugin implements Listener {
     public static String prefix;
     String world;
     String bow_0_KickReason;
-    int bow_0_Chance;
+    int bow_0_Chance, bow_1_Chance, bow_2_Chance, bow_3_Chance, bow_4_Chance, bow_4_Duration;
     boolean bow_0_Kick;
-    int bow_1_Chance;
     double bow_1_TakeMoney;
-    int bow_2_Chance;
-    int bow_3_Chance;
-    int bow_4_Chance;
-    int bow_4_Duration;
     int saviorLevel;
     boolean takeEXP;
     int allexp;
@@ -567,6 +560,9 @@ public final class Main extends JavaPlugin implements Listener {
 
     public static Main getMain() {
         return main;
+    }
+
+    public static void loadConfig() {
     }
 }
 
