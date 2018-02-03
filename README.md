@@ -1,2 +1,5 @@
-# Slimefun弓  
-Slimefun弓 和 rbq.
+# SlimefunBow
+A Minecraft Plugin
+# Description
+Add 4 bows
+Remove hacked item 
