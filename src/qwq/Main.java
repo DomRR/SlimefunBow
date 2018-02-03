@@ -30,6 +30,8 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
@@ -62,6 +64,8 @@ public final class Main extends JavaPlugin implements Listener {
     double bow_1_TakeMoney;
     int bow_2_Chance;
     int bow_3_Chance;
+    int bow_4_Chance;
+    int bow_4_Duration;
     int saviorLevel;
     boolean takeEXP;
     int allexp;
@@ -94,10 +98,12 @@ public final class Main extends JavaPlugin implements Listener {
         SlimefunItem yellow_bow = new SlimefunItem(rbq, new CustomItem(new MaterialData(Material.BOW), ChatColor.YELLOW + "黄弓", "&r耐久: &e233"), "YELLOW_BOW", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, IS(Material.STICK, null, null), SlimefunItems.GOLD_24K_BLOCK, IS(Material.STICK, null, null), null, SlimefunItems.GOLD_24K_BLOCK, null, IS(Material.STICK, null, null), SlimefunItems.GOLD_24K_BLOCK});
         SlimefunItem red_bow = new SlimefunItem(rbq, new CustomItem(new MaterialData(Material.BOW), ChatColor.RED + "红弓", "&r耐久: &e233"), "RED_BOW", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, IS(Material.STICK, null, null), SlimefunItems.RUNE_FIRE, IS(Material.STICK, null, null), null, SlimefunItems.RUNE_FIRE, null, IS(Material.STICK, null, null), SlimefunItems.RUNE_FIRE});
         SlimefunItem purple_bow = new SlimefunItem(rbq, new CustomItem(new MaterialData(Material.BOW), ChatColor.DARK_PURPLE + "紫弓", "&r耐久: &e233"), "PURPLE_BOW", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, IS(Material.STICK, null, null), SlimefunItems.RUNE_ENDER, IS(Material.STICK, null, null), null, SlimefunItems.RUNE_ENDER, null, IS(Material.STICK, null, null), SlimefunItems.RUNE_ENDER});
+        SlimefunItem gold_bow = new SlimefunItem(rbq, new CustomItem(new MaterialData(Material.BOW), ChatColor.GOLD + "橙弓", "&r耐久: &e233"), "PURPLE_BOW", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, IS(Material.STICK, null, null), SlimefunItems.RUNE_ENDER, IS(Material.STICK, null, null), null, SlimefunItems.RUNE_ENDER, null, IS(Material.STICK, null, null), SlimefunItems.RUNE_ENDER});
         green_bow.register();
         yellow_bow.register();
         red_bow.register();
         purple_bow.register();
+        gold_bow.register();
         Research research$1 = new Research(27649, ChatColor.GREEN + "绿弓!", 100);
         research$1.addItems(green_bow);
         research$1.register();
@@ -110,6 +116,9 @@ public final class Main extends JavaPlugin implements Listener {
         Research research$4 = new Research(27652, ChatColor.RED + "紫弓!", 100);
         research$4.addItems(purple_bow);
         research$4.register();
+        Research research$5 = new Research(27653, ChatColor.GOLD + "橙弓!", 100);
+        research$5.addItems(gold_bow);
+        research$5.register();
         config.addDefault("插件前缀", "&b[SlimefunBow] &r");
         config.addDefault("可用世界", "world");
         config.addDefault("绿弓踢出原因", "233");
@@ -119,6 +128,8 @@ public final class Main extends JavaPlugin implements Listener {
         config.addDefault("黄弓盗取游戏币数量", 2.33);
         config.addDefault("红弓效果几率", 5);
         config.addDefault("紫弓效果几率", 4);
+        config.addDefault("橙弓效果几率", 4);
+        config.addDefault("橙弓效果持续时间", 60);
         config.addDefault("Savior等级", 3);
         config.addDefault("花费经验", false);
         config.addDefault("All2倍数", 2);
@@ -156,6 +167,8 @@ public final class Main extends JavaPlugin implements Listener {
         bow_1_TakeMoney = getConfig().getDouble("黄弓盗取游戏币数量");
         bow_2_Chance = getConfig().getInt("红弓效果几率");
         bow_3_Chance = getConfig().getInt("紫弓效果几率");
+        bow_4_Chance = getConfig().getInt("橙弓效果几率");
+        bow_4_Duration = getConfig().getInt("橙弓效果持续时间");
         saviorLevel = getConfig().getInt("Savior等级");
         takeEXP = getConfig().getBoolean("花费经验");
         all2Multiple = getConfig().getInt("All2倍数");
@@ -285,6 +298,8 @@ public final class Main extends JavaPlugin implements Listener {
             bow_1_TakeMoney = getConfig().getDouble("黄弓盗取游戏币数量");
             bow_2_Chance = getConfig().getInt("红弓效果几率");
             bow_3_Chance = getConfig().getInt("紫弓效果几率");
+            bow_4_Chance = getConfig().getInt("橙弓效果几率");
+            bow_4_Duration = getConfig().getInt("橙弓效果持续时间");
             saviorLevel = getConfig().getInt("Savior等级");
             takeEXP = getConfig().getBoolean("花费经验");
             all2Multiple = getConfig().getInt("All2倍数");
@@ -319,7 +334,7 @@ public final class Main extends JavaPlugin implements Listener {
         Player p = (Player) e.getEntity();
         // 判断是否为普通弓 防止名称为null 下面代码报错
         if (e.getBow().getItemMeta().getDisplayName() == null) return;
-        if ((e.getBow().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "绿弓")) | (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "黄弓"))| (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.RED + "红弓"))| (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "紫弓"))) {
+        if ((e.getBow().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "绿弓")) | (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "黄弓"))| (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.RED + "红弓")) | (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "紫弓")) | (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "橙弓"))) {
             if (debug) getLogger().info(e.getBow().getItemMeta().getLore().toString());
             String temp = ChatColor.stripColor(e.getBow().getItemMeta().getLore().toString());
             if (!temp.contains("耐久:")) {
@@ -350,6 +365,9 @@ public final class Main extends JavaPlugin implements Listener {
             }
             if (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "紫弓")) {
                 e.getProjectile().setMetadata("Bow$3", new FixedMetadataValue(this, e.getProjectile()));
+            }
+            if (e.getBow().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "橙弓")) {
+                e.getProjectile().setMetadata("Bow$4", new FixedMetadataValue(this, e.getProjectile()));
             }
         }
     }
@@ -454,6 +472,14 @@ public final class Main extends JavaPlugin implements Listener {
                 Location location1 = pShooter.getLocation();
                 p.teleport(location1);
                 pShooter.teleport(location);
+            }
+        }
+        if (arrow.hasMetadata("Bow$4")) {
+            int i = new Random().nextInt(bow_4_Chance);
+            if (debug) getLogger().info("随机: " + Integer.toString(i));
+            if (i == 0) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, bow_4_Duration * 20 ,2));
+                pShooter.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, bow_4_Duration * 20 ,2));
             }
         }
     }
