@@ -27,7 +27,7 @@ public final class HackItems implements Listener{
         if (p.getWorld().getName().toString().equals("instance")) return;
         if (debug) Bukkit.getLogger().info(getItemName(e.getWhoClicked(), e.getRawSlot()));
         if ((ChatColor.stripColor(getItemName(e.getWhoClicked(), e.getRawSlot())).contains("UMP45")) || ChatColor.stripColor(getItemName(e.getWhoClicked(), e.getRawSlot())).contains("MAC-10") || ChatColor.stripColor(getItemName(e.getWhoClicked(), e.getRawSlot())).contains("PP")) {
-            Bukkit.getLogger().info("非法物品: " + p.getName());
+            Bukkit.getLogger().info("非法物品: " + p.getName() + ", " + p.getWorld());
         }
     }
 
