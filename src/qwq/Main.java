@@ -55,6 +55,7 @@ public final class Main extends JavaPlugin implements Listener {
     // 配置文件
     public static String prefix;
     String world;
+    public static int sfCooldown;
     String bow_0_KickReason;
     int bow_0_Chance, bow_1_Chance, bow_2_Chance, bow_3_Chance, bow_4_Chance, bow_4_Duration;
     boolean bow_0_Kick;
@@ -77,6 +78,7 @@ public final class Main extends JavaPlugin implements Listener {
     FileConfiguration mysql = YamlConfiguration.loadConfiguration(mySQLConfig);
     public static Map<UUID, UUID> rbqs = Maps.newHashMap();
     public static Map<UUID, Double> rbqMoney = Maps.newHashMap();
+    public static Map<UUID, Long> slimefunCooldown = Maps.newHashMap();
     private static Main main;
     public static String target;
 
@@ -86,6 +88,7 @@ public final class Main extends JavaPlugin implements Listener {
         setupEconomy();
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new HackItems(), this);
+        getServer().getPluginManager().registerEvents(new SlimefunCooldown(), this);
         Category rbq = new Category(new CustomItem(new MaterialData(Material.DIAMOND), "&4rbq", "", "&a> 点击打开"));
         SlimefunItem green_bow = new SlimefunItem(rbq, new CustomItem(new MaterialData(Material.BOW), ChatColor.GREEN + "绿弓", "&r耐久: &e233"), "GREEN_BOW", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, SlimefunItems.GRANDPAS_WALKING_STICK, SlimefunItems.BLADE_OF_VAMPIRES, SlimefunItems.GRANDPAS_WALKING_STICK, null, SlimefunItems.BLADE_OF_VAMPIRES, null, SlimefunItems.GRANDPAS_WALKING_STICK, SlimefunItems.BLADE_OF_VAMPIRES});
         SlimefunItem yellow_bow = new SlimefunItem(rbq, new CustomItem(new MaterialData(Material.BOW), ChatColor.YELLOW + "黄弓", "&r耐久: &e233"), "YELLOW_BOW", RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[]{null, IS(Material.STICK, null, null), SlimefunItems.GOLD_24K_BLOCK, IS(Material.STICK, null, null), null, SlimefunItems.GOLD_24K_BLOCK, null, IS(Material.STICK, null, null), SlimefunItems.GOLD_24K_BLOCK});
@@ -114,6 +117,7 @@ public final class Main extends JavaPlugin implements Listener {
         research$5.register();
         config.addDefault("插件前缀", "&b[SlimefunBow] &r");
         config.addDefault("可用世界", "world");
+        config.addDefault("Slimefun书冷却", 5);
         config.addDefault("绿弓踢出原因", "233");
         config.addDefault("绿弓效果几率", 10);
         config.addDefault("绿弓踢出", false);
@@ -153,6 +157,7 @@ public final class Main extends JavaPlugin implements Listener {
 
         prefix = ChatColor.translateAlternateColorCodes('&', getConfig().getString("插件前缀"));
         world = getConfig().getString("可用世界");
+        sfCooldown = getConfig().getInt("Slimefun书冷却");
         bow_0_KickReason = getConfig().getString("绿弓踢出原因");
         bow_0_Chance = getConfig().getInt("绿弓效果几率");
         bow_0_Kick = getConfig().getBoolean("绿弓踢出");
@@ -284,6 +289,7 @@ public final class Main extends JavaPlugin implements Listener {
             reloadConfig();
             prefix = ChatColor.translateAlternateColorCodes('&', getConfig().getString("插件前缀"));
             world = getConfig().getString("可用世界");
+            sfCooldown = getConfig().getInt("Slimefun书冷却");
             bow_0_KickReason = getConfig().getString("绿弓踢出原因");
             bow_0_Chance = getConfig().getInt("绿弓效果几率");
             bow_0_Kick = getConfig().getBoolean("绿弓踢出");
