@@ -2,7 +2,6 @@ package qwq;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -46,6 +45,3 @@ public class SlimefunCooldown implements Listener {
         Bukkit.getLogger().info(s);
     }
 }
-
-
-//                    e.getItem().setItemMeta(Main.IM(Material.AIR, null, null));

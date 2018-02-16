@@ -109,7 +109,7 @@ public final class Main extends JavaPlugin implements Listener {
         Research research$3 = new Research(27651, ChatColor.RED + "红弓!", 100);
         research$3.addItems(red_bow);
         research$3.register();
-        Research research$4 = new Research(27652, ChatColor.RED + "紫弓!", 100);
+        Research research$4 = new Research(27652, ChatColor.DARK_PURPLE + "紫弓!", 100);
         research$4.addItems(purple_bow);
         research$4.register();
         Research research$5 = new Research(27653, ChatColor.GOLD + "橙弓!", 100);
@@ -117,7 +117,7 @@ public final class Main extends JavaPlugin implements Listener {
         research$5.register();
         config.addDefault("插件前缀", "&b[SlimefunBow] &r");
         config.addDefault("可用世界", "world");
-        config.addDefault("Slimefun书冷却", 5);
+        config.addDefault("Slimefun书冷却", 3);
         config.addDefault("绿弓踢出原因", "233");
         config.addDefault("绿弓效果几率", 10);
         config.addDefault("绿弓踢出", false);
